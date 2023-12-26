@@ -36,6 +36,7 @@ class LocationService {
         lat: userLocation.latitude!,
         long: userLocation.longitude!,
       );
+      print(currentLocation.lat);
     } catch (e) {
       if (e == PlatformException) {
         print('Error occorred');
