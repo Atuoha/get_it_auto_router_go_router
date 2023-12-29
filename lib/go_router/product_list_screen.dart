@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get_it_auto_router_go_router/go_router/product_details.dart';
 import 'package:get_it_auto_router_go_router/go_router/widgets/search_section.dart';
 import 'package:get_it_auto_router_go_router/go_router/widgets/single_product.dart';
+import 'package:go_router/go_router.dart';
 
 import '../get_it/model/product.dart';
 
-class GoRouterScreen extends StatelessWidget {
-  const GoRouterScreen({super.key});
+class ProductListScreen extends StatelessWidget {
+  const ProductListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +38,9 @@ class GoRouterScreen extends StatelessWidget {
                   Product product = products[index];
 
                   return GestureDetector(
-                    onTap: () => Navigator.of(context).pushNamed(
-                      ProductDetails.routeName,
-                      arguments: {
-                        'product': product,
-                      },
+                    onTap: () => context.go(
+                      '/${ProductDetails.routeName}',
+                      extra: product,
                     ),
                     child: SingleProduct(product: product),
                   );

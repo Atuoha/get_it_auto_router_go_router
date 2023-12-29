@@ -1,133 +1,130 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import '../get_it/model/product.dart';
 
 class ProductDetails extends StatefulWidget {
-  static const routeName = '/product-details';
+  static const routeName = 'product-details';
+  final Product product;
 
-  const ProductDetails({super.key});
+  const ProductDetails({super.key, required this.product});
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  late Color colored;
+
+  // get color
+  Color getColor(String color) {
+    switch (color) {
+      case 'red':
+        colored = Colors.red;
+        break;
+      case 'purple':
+        colored = Colors.purple;
+        break;
+      case 'grey':
+        colored = Colors.grey;
+        break;
+      case 'black':
+        colored = Colors.black;
+        break;
+      case 'orange':
+        colored = Colors.orange;
+        break;
+      case 'indigo':
+        colored = Colors.indigo;
+        break;
+      case 'yellow':
+        colored = Colors.yellow;
+        break;
+      case 'blue':
+        colored = Colors.blue;
+        break;
+      case 'brown':
+        colored = Colors.brown;
+        break;
+      case 'teal':
+        colored = Colors.teal;
+        break;
+      default:
+    }
+
+    return colored;
+  }
+
+  // show modal for image
+  showImageModal(context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          insetPadding: const EdgeInsets.all(12),
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(3.0),
+            child: Stack(children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image(
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  image: NetworkImage(widget.product.imageUrl),
+                ),
+              ),
+              Positioned(
+                right: 1,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey.withOpacity(0.5),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Text(widget.product.name),
+                        const SizedBox(width: 5),
+                        Text(
+                          '\$${widget.product.price}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ]),
+          ),
+        );
+      },
+    );
+  }
+
+  // build container for color
+  Widget buildContainer(color) {
+    return Container(
+      height: 5,
+      width: 40,
+      decoration: BoxDecoration(
+        color: getColor(color),
+        borderRadius: BorderRadius.circular(20),
+      ),
+    );
+  }
+
+  // pay now
   void payNow() {}
 
   @override
   Widget build(BuildContext context) {
-    var data =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    Product productDetails = data["product"] as Product;
-
-    List<String> availableColors = productDetails.colors.split(',');
-    late Color colored;
-
-    // get color
-    Color getColor(String color) {
-      switch (color) {
-        case 'red':
-          colored = Colors.red;
-          break;
-        case 'purple':
-          colored = Colors.purple;
-          break;
-        case 'grey':
-          colored = Colors.grey;
-          break;
-        case 'black':
-          colored = Colors.black;
-          break;
-        case 'orange':
-          colored = Colors.orange;
-          break;
-        case 'indigo':
-          colored = Colors.indigo;
-          break;
-        case 'yellow':
-          colored = Colors.yellow;
-          break;
-        case 'blue':
-          colored = Colors.blue;
-          break;
-        case 'brown':
-          colored = Colors.brown;
-          break;
-        case 'teal':
-          colored = Colors.teal;
-          break;
-        default:
-      }
-
-      return colored;
-    }
-
-    // show modal for image
-    showImageModal(context) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            insetPadding: const EdgeInsets.all(12),
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: Stack(children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image(
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    image: NetworkImage(productDetails.imageUrl),
-                  ),
-                ),
-                Positioned(
-                  right: 1,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey.withOpacity(0.5),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(productDetails.name),
-                          const SizedBox(width: 5),
-                          Text(
-                            '\$${productDetails.price}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ]),
-            ),
-          );
-        },
-      );
-    }
-
-    // build container for color
-    Widget buildContainer(color) {
-      return Container(
-        height: 5,
-        width: 40,
-        decoration: BoxDecoration(
-          color: getColor(color),
-          borderRadius: BorderRadius.circular(20),
-        ),
-      );
-    }
+    List<String> availableColors = widget.product.colors.split(',');
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -158,9 +155,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                   bottom: Radius.circular(100),
                 ),
                 child: Hero(
-                  tag: productDetails.id,
+                  tag: widget.product.id,
                   child: Image.network(
-                    productDetails.imageUrl,
+                    widget.product.imageUrl,
                     fit: BoxFit.cover,
                     width: double.infinity,
                   ),
@@ -176,7 +173,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    productDetails.name,
+                    widget.product.name,
                     style: const TextStyle(
                       fontSize: 30,
                     ),
@@ -197,7 +194,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Row(
                     children: [
                       Text(
-                        '\$${productDetails.price.toString()}',
+                        '\$${widget.product.price.toString()}',
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -205,7 +202,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ),
                       const SizedBox(width: 3),
                       Text(
-                        '\$${productDetails.previousPrice.toString()}',
+                        '\$${widget.product.previousPrice.toString()}',
                         style: const TextStyle(
                           fontSize: 15,
                           color: Colors.grey,
@@ -255,7 +252,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    productDetails.description,
+                    widget.product.description,
                     textAlign: TextAlign.justify,
                   ),
                 ],
@@ -264,7 +261,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
         ],
       ),
-      bottomSheet: bottomContainer(productDetails),
+      bottomSheet: bottomContainer(widget.product),
     );
   }
 
