@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import '../../get_it/model/product.dart';
+import '../models/product.dart';
 import '../widgets/bottom_container.dart';
 import '../widgets/color_container.dart';
 import '../widgets/ratings.dart';
@@ -63,6 +63,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   void payNow() {
     context.goNamed(
       'pay-now',
+      pathParameters: <String, String>{
+        'description': widget.product.description,
+      },
       queryParameters: <String, String>{
         'img': widget.product.imageUrl.toString(),
         'price': widget.product.price.toString(),

@@ -6,6 +6,7 @@ class ProductPurchaseScreen extends StatelessWidget {
     required this.productImage,
     required this.productName,
     required this.productPrice,
+    required this.description,
   });
 
   static const routeName = 'pay-now';
@@ -13,6 +14,7 @@ class ProductPurchaseScreen extends StatelessWidget {
   final String productName;
   final String productPrice;
   final String productImage;
+  final String description;
 
   @override
   Widget build(BuildContext context) {
@@ -26,38 +28,46 @@ class ProductPurchaseScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Purchase Item'),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(productImage),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    productName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 18,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: <Widget>[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(productImage),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      productName,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 18,
+                      ),
                     ),
+                    Text(
+                      '\$$productPrice',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  description,
+                  style: const TextStyle(
+                    fontSize: 16,
                   ),
-                  Text(
-                    '\$$productPrice',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
-                  )
-                ],
-              )
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

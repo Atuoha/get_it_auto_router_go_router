@@ -1,7 +1,8 @@
 // show modal for image
 import 'package:flutter/material.dart';
 
-import '../../get_it/model/product.dart';
+import '../models/product.dart';
+
 
 void showImageModal(BuildContext context,Product product) {
   showDialog(

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get_it_auto_router_go_router/go_router/controllers/product_controller.dart';
 import 'package:get_it_auto_router_go_router/go_router/screens/product_details_screen.dart';
 import 'package:get_it_auto_router_go_router/go_router/widgets/search_section.dart';
 import 'package:get_it_auto_router_go_router/go_router/widgets/single_product.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../get_it/model/product.dart';
+import '../models/product.dart';
 
 class ProductListScreen extends StatelessWidget {
   const ProductListScreen({super.key});
 
+
   @override
   Widget build(BuildContext context) {
+    ProductController productController = ProductController();
     TextEditingController searchController = TextEditingController();
 
     return Scaffold(
@@ -28,19 +31,19 @@ class ProductListScreen extends StatelessWidget {
             const SizedBox(height: 10),
             Expanded(
               child: GridView.builder(
-                itemCount: products.length,
+                itemCount: productController.products.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
                 ),
                 itemBuilder: (context, index) {
-                  Product product = products[index];
+                  Product product = productController.products[index];
 
                   return GestureDetector(
-                    onTap: () => context.go(
-                      '/${ProductDetailsScreen.routeName}',
-                      extra: product,
+                    onTap: () => context.goNamed(
+                      ProductDetailsScreen.routeName,
+                      queryParameters: {'id': product.id},
                     ),
                     child: SingleProduct(product: product),
                   );
