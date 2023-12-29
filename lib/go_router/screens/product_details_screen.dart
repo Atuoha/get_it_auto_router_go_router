@@ -1,82 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import '../controllers/product_controller.dart';
 import '../models/product.dart';
 import '../widgets/bottom_container.dart';
 import '../widgets/color_container.dart';
 import '../widgets/ratings.dart';
 import '../widgets/show_modal.dart';
 
-class ProductDetailsScreen extends StatefulWidget {
+class ProductDetailsScreen extends StatelessWidget {
   static const routeName = 'product-details';
-  final Product product;
+  final String productId;
 
-  const ProductDetailsScreen({super.key, required this.product});
-
-  @override
-  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
-}
-
-class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  late Color colored;
-
-  // get color
-  Color getColor(String color) {
-    switch (color) {
-      case 'red':
-        colored = Colors.red;
-        break;
-      case 'purple':
-        colored = Colors.purple;
-        break;
-      case 'grey':
-        colored = Colors.grey;
-        break;
-      case 'black':
-        colored = Colors.black;
-        break;
-      case 'orange':
-        colored = Colors.orange;
-        break;
-      case 'indigo':
-        colored = Colors.indigo;
-        break;
-      case 'yellow':
-        colored = Colors.yellow;
-        break;
-      case 'blue':
-        colored = Colors.blue;
-        break;
-      case 'brown':
-        colored = Colors.brown;
-        break;
-      case 'teal':
-        colored = Colors.teal;
-        break;
-      default:
-    }
-
-    return colored;
-  }
-
-  // pay now
-  void payNow() {
-    context.goNamed(
-      'pay-now',
-      pathParameters: <String, String>{
-        'description': widget.product.description,
-      },
-      queryParameters: <String, String>{
-        'img': widget.product.imageUrl.toString(),
-        'price': widget.product.price.toString(),
-        'name': widget.product.name.toString(),
-      },
-    );
-  }
+  const ProductDetailsScreen({
+    super.key,
+    required this.productId,
+  });
 
   @override
   Widget build(BuildContext context) {
-    List<String> availableColors = widget.product.colors.split(',');
+    late Color colored;
+
+    // get color
+    Color getColor(String color) {
+      switch (color) {
+        case 'red':
+          colored = Colors.red;
+          break;
+        case 'purple':
+          colored = Colors.purple;
+          break;
+        case 'grey':
+          colored = Colors.grey;
+          break;
+        case 'black':
+          colored = Colors.black;
+          break;
+        case 'orange':
+          colored = Colors.orange;
+          break;
+        case 'indigo':
+          colored = Colors.indigo;
+          break;
+        case 'yellow':
+          colored = Colors.yellow;
+          break;
+        case 'blue':
+          colored = Colors.blue;
+          break;
+        case 'brown':
+          colored = Colors.brown;
+          break;
+        case 'teal':
+          colored = Colors.teal;
+          break;
+        default:
+      }
+
+      return colored;
+    }
+
+    ProductController productController = ProductController();
+    Product product = productController.findById(productId);
+
+    List<String> availableColors = product.colors.split(',');
+
+    // pay now
+    void payNow() {
+      context.goNamed(
+        'pay-now',
+        pathParameters: <String, String>{
+          'description': product.description,
+        },
+        queryParameters: <String, String>{
+          'img': product.imageUrl.toString(),
+          'price': product.price.toString(),
+          'name': product.name.toString(),
+        },
+      );
+    }
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -100,16 +102,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           Expanded(
             flex: 2,
             child: GestureDetector(
-              onTap: () => showImageModal(context, widget.product),
+              onTap: () => showImageModal(context, product),
               child: ClipRRect(
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.zero,
                   bottom: Radius.circular(50),
                 ),
                 child: Hero(
-                  tag: widget.product.id,
+                  tag: product.id,
                   child: Image.network(
-                    widget.product.imageUrl,
+                    product.imageUrl,
                     fit: BoxFit.cover,
                     width: double.infinity,
                   ),
@@ -125,7 +127,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    widget.product.name,
+                    product.name,
                     style: const TextStyle(
                       fontSize: 30,
                     ),
@@ -136,7 +138,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Row(
                     children: [
                       Text(
-                        '\$${widget.product.price.toString()}',
+                        '\$${product.price.toString()}',
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -144,7 +146,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                       const SizedBox(width: 3),
                       Text(
-                        '\$${widget.product.previousPrice.toString()}',
+                        '\$${product.previousPrice.toString()}',
                         style: const TextStyle(
                           fontSize: 15,
                           color: Colors.grey,
@@ -201,7 +203,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    widget.product.description,
+                    product.description,
                     textAlign: TextAlign.justify,
                   ),
                 ],
@@ -210,7 +212,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
         ],
       ),
-      bottomSheet: bottomContainer(widget.product, payNow),
+      bottomSheet: bottomContainer(product, payNow),
     );
   }
 }

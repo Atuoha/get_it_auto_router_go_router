@@ -1,7 +1,7 @@
 import '../models/product.dart';
 
 class ProductController {
-  Product findById(String id) {
+  Product findById(String? id) {
     return _products.firstWhere((product) => product.id == id);
   }
 

@@ -18,31 +18,9 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: ProductDetailsScreen.routeName,
           name: ProductDetailsScreen.routeName,
-          pageBuilder: (BuildContext context, GoRouterState state) {
-            ProductController productController = ProductController();
-
-            Product product = productController
-                .findById(state.uri.queryParameters['id'] as String);
-
-            return CustomTransitionPage<void>(
-              key: state.pageKey,
-              child: ProductDetailsScreen(
-                product: product,
-              ),
-              transitionDuration: const Duration(milliseconds: 500),
-              reverseTransitionDuration: const Duration(milliseconds: 500),
-              transitionsBuilder: (
-                BuildContext context,
-                Animation<double> animation,
-                Animation<double> secondaryAnimation,
-                Widget child,
-              ) {
-                return FadeTransition(
-                  opacity: CurveTween(curve: Curves.easeInOutQuart)
-                      .animate(animation),
-                  child: child,
-                );
-              },
+          builder: (BuildContext context, GoRouterState state) {
+            return ProductDetailsScreen(
+              productId: state.uri.queryParameters['id'] ?? "",
             );
           },
           routes: <RouteBase>[
