@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get_it_auto_router_go_router/go_router/product_details.dart';
+import 'package:get_it_auto_router_go_router/go_router/screens/product_details_screen.dart';
 import 'package:get_it_auto_router_go_router/go_router/widgets/search_section.dart';
 import 'package:get_it_auto_router_go_router/go_router/widgets/single_product.dart';
 import 'package:go_router/go_router.dart';
 
-import '../get_it/model/product.dart';
+import '../../get_it/model/product.dart';
 
 class ProductListScreen extends StatelessWidget {
   const ProductListScreen({super.key});
@@ -39,7 +39,7 @@ class ProductListScreen extends StatelessWidget {
 
                   return GestureDetector(
                     onTap: () => context.go(
-                      '/${ProductDetails.routeName}',
+                      '/${ProductDetailsScreen.routeName}',
                       extra: product,
                     ),
                     child: SingleProduct(product: product),

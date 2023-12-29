@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../get_it/model/product.dart';
+import 'package:go_router/go_router.dart';
+import '../../get_it/model/product.dart';
 
-class ProductDetails extends StatefulWidget {
+class ProductDetailsScreen extends StatefulWidget {
   static const routeName = 'product-details';
   final Product product;
 
-  const ProductDetails({super.key, required this.product});
+  const ProductDetailsScreen({super.key, required this.product});
 
   @override
-  State<ProductDetails> createState() => _ProductDetailsState();
+  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
 
-class _ProductDetailsState extends State<ProductDetails> {
+class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   late Color colored;
 
   // get color
@@ -120,7 +121,16 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
   // pay now
-  void payNow() {}
+  void payNow() {
+    context.goNamed(
+      'pay-now',
+      queryParameters: <String, String>{
+        'img': widget.product.imageUrl.toString(),
+        'price': widget.product.price.toString(),
+        'name': widget.product.name.toString(),
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +162,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               child: ClipRRect(
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.zero,
-                  bottom: Radius.circular(100),
+                  bottom: Radius.circular(50),
                 ),
                 child: Hero(
                   tag: widget.product.id,
@@ -338,7 +348,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     height: 50,
                     width: 120,
                     decoration: const BoxDecoration(
-                      color: Colors.grey,
+                      color: Colors.brown,
                       borderRadius: BorderRadius.only(
                         bottomRight: Radius.circular(5),
                         topRight: Radius.circular(5),
@@ -346,7 +356,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                     child: const Center(
                       child: Text(
-                        'Order Now',
+                        'Buy Now',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
