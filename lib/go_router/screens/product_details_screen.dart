@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../../get_it/model/product.dart';
+import '../widgets/bottom_container.dart';
+import '../widgets/color_container.dart';
+import '../widgets/ratings.dart';
+import '../widgets/show_modal.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   static const routeName = 'product-details';
@@ -55,71 +59,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return colored;
   }
 
-  // show modal for image
-  showImageModal(context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          insetPadding: const EdgeInsets.all(12),
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(3.0),
-            child: Stack(children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image(
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  image: NetworkImage(widget.product.imageUrl),
-                ),
-              ),
-              Positioned(
-                right: 1,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey.withOpacity(0.5),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Text(widget.product.name),
-                        const SizedBox(width: 5),
-                        Text(
-                          '\$${widget.product.price}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ]),
-          ),
-        );
-      },
-    );
-  }
-
-  // build container for color
-  Widget buildContainer(color) {
-    return Container(
-      height: 5,
-      width: 40,
-      decoration: BoxDecoration(
-        color: getColor(color),
-        borderRadius: BorderRadius.circular(20),
-      ),
-    );
-  }
-
   // pay now
   void payNow() {
     context.goNamed(
@@ -158,7 +97,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           Expanded(
             flex: 2,
             child: GestureDetector(
-              onTap: () => showImageModal(context),
+              onTap: () => showImageModal(context, widget.product),
               child: ClipRRect(
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.zero,
@@ -189,17 +128,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                   ),
                   const SizedBox(height: 5),
-                  const Row(
-                    children: [
-                      Icon(Icons.star, color: Colors.deepOrange, size: 15),
-                      Icon(Icons.star, color: Colors.deepOrange, size: 15),
-                      Icon(Icons.star, color: Colors.deepOrange, size: 15),
-                      Icon(Icons.star, color: Colors.deepOrange, size: 15),
-                      Icon(Icons.star, color: Colors.deepOrange, size: 15),
-                      SizedBox(width: 20),
-                      Text('(3400 Reviews)')
-                    ],
-                  ),
+                  ratings(),
                   const SizedBox(height: 5),
                   Row(
                     children: [
@@ -252,13 +181,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      for (var color in availableColors) buildContainer(color)
+                      for (var color in availableColors)
+                        buildContainer(
+                          color,
+                          getColor,
+                        )
                     ],
                   ),
                   const SizedBox(height: 15),
                   const Text(
                     'About',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Text(
@@ -271,105 +207,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
         ],
       ),
-      bottomSheet: bottomContainer(widget.product),
-    );
-  }
-
-  // bottom container
-  Container bottomContainer(Product productDetails) {
-    return Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 18.0,
-          vertical: 10,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Price',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  '\$${productDetails.price}',
-                  style: const TextStyle(
-                    color: Colors.brown,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 25,
-                  ),
-                )
-              ],
-            ),
-            Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                Container(
-                  height: 50,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.brown.withOpacity(0.3),
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(5),
-                      topLeft: Radius.circular(5),
-                    ),
-                  ),
-                  child: const Center(
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.shopping_cart_checkout,
-                          color: Colors.white,
-                        ),
-                        SizedBox(width: 15),
-                        Text(
-                          '1',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => payNow(),
-                  child: Container(
-                    height: 50,
-                    width: 120,
-                    decoration: const BoxDecoration(
-                      color: Colors.brown,
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(5),
-                        topRight: Radius.circular(5),
-                      ),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Buy Now',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
+      bottomSheet: bottomContainer(widget.product, payNow),
     );
   }
 }
