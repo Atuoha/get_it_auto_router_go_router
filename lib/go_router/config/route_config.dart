@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get_it_auto_router_go_router/go_router/controllers/product_controller.dart';
 import 'package:go_router/go_router.dart';
@@ -63,3 +65,23 @@ final GoRouter router = GoRouter(
     ),
   ],
 );
+
+
+
+// for listening to streams
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<dynamic> stream) {
+    notifyListeners();
+    _subscription = stream.asBroadcastStream().listen(
+          (dynamic _) => notifyListeners(),
+        );
+  }
+
+  late final StreamSubscription<dynamic> _subscription;
+
+  @override
+  void dipose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+}
