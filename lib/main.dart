@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it_auto_router_go_router/auto_router/control_screen.dart';
+import 'auto_router/route/app_route.dart';
 import 'get_it/views/get_it_screen.dart';
 import 'go_router/config/route_config.dart';
 
@@ -21,15 +22,15 @@ class MyApp extends StatelessWidget {
       ),
     );
 
-   // get it
-   //  return MaterialApp(
-   //    title: 'Flutter GoRouter',
-   //    theme: ThemeData(
-   //      colorScheme: ColorScheme.fromSeed(seedColor: Colors.brown),
-   //      useMaterial3: true,
-   //    ),
-   //    home: const GetItScreen(), // get it
-   //  );
+    // get it
+    //  return MaterialApp(
+    //    title: 'Flutter GoRouter',
+    //    theme: ThemeData(
+    //      colorScheme: ColorScheme.fromSeed(seedColor: Colors.brown),
+    //      useMaterial3: true,
+    //    ),
+    //    home: const GetItScreen(), // get it
+    //  );
 
     // go router
     // return MaterialApp.router(
@@ -41,14 +42,16 @@ class MyApp extends StatelessWidget {
     //   routerConfig: router, // go router
     // );
 
+    final appRouter = AppRouter();
+
     // auto router
-     return MaterialApp(
-       title: 'Flutter GoRouter',
-       theme: ThemeData(
-         colorScheme: ColorScheme.fromSeed(seedColor: Colors.brown),
-         useMaterial3: true,
-       ),
-       home: const ControlScreen(), // auto router
-     );
+    return MaterialApp.router(
+      title: 'Flutter GoRouter',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.brown),
+        useMaterial3: true,
+      ),
+      routerConfig: appRouter.config(),
+    );
   }
 }

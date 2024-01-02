@@ -1,4 +1,7 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
+
+@RoutePage(name: 'screen3')
 
 class Screen3 extends StatelessWidget {
   const Screen3({super.key});
