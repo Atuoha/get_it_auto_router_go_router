@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_it_auto_router_go_router/auto_router/control_screen.dart';
 import 'auto_router/route/app_route.dart';
-import 'get_it/views/get_it_screen.dart';
-import 'go_router/config/route_config.dart';
 
 void main() {
   // locator(); // get it
